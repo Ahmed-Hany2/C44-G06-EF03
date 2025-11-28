@@ -65,6 +65,52 @@ namespace Assignment
                     }
                 }
             }
+
+            // join
+            var students = from student in context.Students
+                                   join dept in context.Departments
+                                   on student.Dep_Id equals dept.ID
+                                   select new
+                                   {
+                                       StudentName = student.FName + " " + student.LName,
+                                       DepartmentName = dept.Name,
+                                       Age = student.Age
+                                   };
+
+            foreach (var item in students)
+            {
+                Console.WriteLine($"Student: {item.StudentName}, Department: {item.DepartmentName}, Age: {item.Age}");
+            }
+
+            var coursesWithTopics = context.Courses
+                   .Join(context.Topics,
+                         course => course.Top_ID,
+                         topic => topic.ID,
+                         (course, topic) => new
+                         {
+                             CourseName = course.Name,
+                             TopicName = topic.Name,
+                             Duration = course.Duration
+                         });
+
+            foreach (var item in coursesWithTopics)
+            {
+                Console.WriteLine($"Course: {item.CourseName}, Topic: {item.TopicName}, Duration: {item.Duration} hours");
+            }
+
+            var studentsPerDept = from student in context.Students
+                                  join dept in context.Departments on student.Dep_Id equals dept.ID
+                                  group student by dept.Name into deptGroup
+                                  select new
+                                  {
+                                      DepartmentName = deptGroup.Key,
+                                      StudentCount = deptGroup.Count()
+                                  };
+
+            foreach (var item in studentsPerDept)
+            {
+                Console.WriteLine($"Department: {item.DepartmentName}, Number of Students: {item.StudentCount}");
+            }
         }
     }
 }
