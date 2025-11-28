@@ -1,4 +1,6 @@
-﻿namespace Assignment
+﻿using Assignment.Models;
+
+namespace Assignment
 {
     internal class Program
     {
@@ -30,6 +32,37 @@
                 else
                 {
                     Console.WriteLine("No Topic assigned to this course.");
+                }
+                // Lazy Loading
+                var student = context.Students.FirstOrDefault(s => s.ID == 1);
+
+                if (student != null)
+                {
+                    Console.WriteLine($"Student: {student.FName} {student.LName}");
+                    Console.WriteLine($"Department {student.Department?.Name}");
+                }
+
+                var course = context.Courses.FirstOrDefault(c => c.ID == 1);
+
+                if (course != null)
+                {
+                    Console.WriteLine($"Course: {course.Name}");
+
+               
+                    Console.WriteLine($"Topic : {course.Topic?.Name}");
+                }
+                var department3 = context.Departments.FirstOrDefault(d => d.ID == 1);
+
+                if (department != null)
+                {
+                    Console.WriteLine($"Department: {department.Name}");
+
+                    Console.WriteLine($"Number of Students : {department3.Students.Count}");
+
+                    foreach (var s in department3.Students)
+                    {
+                        Console.WriteLine($"  - {s.FName} {s.LName}");
+                    }
                 }
             }
         }
